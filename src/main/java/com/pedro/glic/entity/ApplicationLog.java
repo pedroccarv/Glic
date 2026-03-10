@@ -17,6 +17,8 @@ public class ApplicationLog {
 
     private LocalDateTime applicationTime;
 
+    private Double consumedCarbs;
+
     @ManyToOne
     private User user;
 
@@ -59,12 +61,10 @@ public class ApplicationLog {
         this.user = user;
     }
 
-    public Double carbsQuantity() {
-        if (appliedUnits != null && user.getCarbCounting() != null && insulin != null) {
-            if (List.of(InsulinType.Rapid, InsulinType.Short).contains(insulin.getType())){
-                return (double) user.getCarbCounting() * appliedUnits;
-            }
+    public Double calculateSuggestedDose() {
+        if (consumedCarbs != null && user.getCarbCounting() != null && consumedCarbs > 0 && user.getCarbCounting() > 0) {
+            return consumedCarbs / user.getCarbCounting();
         }
-    return 0.0;
+        return 0.0;
     }
 }
