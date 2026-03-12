@@ -27,6 +27,10 @@ public class Insulin {
 
     private String description;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     @Enumerated(EnumType.STRING)
     private InsulinType type;
 
@@ -107,5 +111,13 @@ public class Insulin {
 
     public void setPurchaseDate(LocalDate purchaseDate) {
         this.purchaseDate = purchaseDate;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
     }
 }

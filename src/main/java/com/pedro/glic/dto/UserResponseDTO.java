@@ -1,5 +1,6 @@
 package com.pedro.glic.dto;
 
+import com.pedro.glic.entity.User;
 import com.pedro.glic.enums.DiabetesType;
 
 import java.time.LocalDate;
@@ -16,6 +17,23 @@ public record UserResponseDTO (
         String phone,
         Integer carbCounting,
         DiabetesType diabetesType,
-        List<InsulinResponseDTO> insulins
+        List<InsulinResponseDTO> insulins,
+        List<ApplicationLogResponseDTO> applicationLog
 ){
+    public static UserResponseDTO toDTO(User user){
+        return new UserResponseDTO(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getBirthday(),
+                user.getAge(),
+                user.getDiagnostic(),
+                user.getTimeSinceDiagnosis(),
+                user.getPhone(),
+                user.getCarbCounting(),
+                user.getDiabetesType(),
+                user.getInsulins().stream().map(InsulinResponseDTO::toDTO).toList(),
+                user.getApplicationLogs().stream().map(ApplicationLogResponseDTO::toDTO).toList()
+        );
+    }
 }

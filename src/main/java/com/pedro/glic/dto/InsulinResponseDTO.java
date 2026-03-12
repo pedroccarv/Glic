@@ -1,5 +1,6 @@
 package com.pedro.glic.dto;
 
+import com.pedro.glic.entity.Insulin;
 import com.pedro.glic.enums.InsulinFormat;
 import com.pedro.glic.enums.InsulinType;
 
@@ -18,4 +19,18 @@ public record InsulinResponseDTO(
         InsulinType type,
         InsulinFormat format
 ) {
+    public static InsulinResponseDTO toDTO(Insulin insulin) {
+        return new InsulinResponseDTO(
+                insulin.getId(),
+                insulin.getName(),
+                insulin.getUnits(),
+                insulin.getPrice(),
+                insulin.getQuantity(),
+                insulin.getOpeningDate(),
+                insulin.getPurchaseDate(),
+                insulin.getDescription(),
+                insulin.getType(),
+                insulin.getFormat()
+        );
+    }
 }

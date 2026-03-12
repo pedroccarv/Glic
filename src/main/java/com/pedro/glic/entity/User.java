@@ -1,10 +1,12 @@
 package com.pedro.glic.entity;
 
+import com.pedro.glic.dto.UserRequestDTO;
 import com.pedro.glic.enums.DiabetesType;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -32,9 +34,24 @@ public class User {
     @Enumerated(EnumType.STRING)
     private DiabetesType diabetesType;
 
-    @OneToMany
-    @JoinColumn(name = "user_id")
-    private List<Insulin> insulins;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Insulin> insulins = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<ApplicationLog> applicationLogs = new ArrayList<>();
+
+    public User() {}
+
+    public User(String name, String email, String password, LocalDate birthday, LocalDate diagnostic, String phone, Integer carbCounting, DiabetesType diabetesType) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.birthday = birthday;
+        this.diagnostic = diagnostic;
+        this.phone = phone;
+        this.carbCounting = carbCounting;
+        this.diabetesType = diabetesType;
+    }
 
     public Long getId() {
         return id;
@@ -104,14 +121,45 @@ public class User {
         this.phone = phone;
     }
 
+    public List<Insulin> getInsulins(){
+        return insulins;
+    }
+
+    public List<ApplicationLog> getApplicationLogs(){
+        return applicationLogs;
+    }
+
+    public void addInsulin(Insulin insulin){
+        this.insulins.add(insulin);
+        insulin.setUser(this);
+
+    }
+
+    public void addApplicationLog(ApplicationLog log){
+        this.applicationLogs.add(log);
+        log.setUser(this);
+    }
+
+    public void updateFrom(UserRequestDTO dto) {
+        if (dto.name() != null) this.name = dto.name();
+        if (dto.email() != null) this.email = dto.email();
+        if (dto.phone() != null) this.phone = dto.phone();
+        if (dto.birthday() != null) this.birthday = dto.birthday();
+        if (dto.diagnostic() != null) this.diagnostic = dto.diagnostic();
+        if (dto.carbCounting() != null) this.carbCounting = dto.carbCounting();
+        if (dto.diabetesType() != null) this.diabetesType = dto.diabetesType();
+    }
+
     @Transient
-    private Integer getAge(){
+    public Integer getAge(){
         if (birthday == null){
             return null;
         }
         Period period = Period.between(birthday, LocalDate.now());
-        return Period.between(birthday, LocalDate.now()).getYears();
+        return period.getYears();
     }
+
+
 
     @Transient
     public String getTimeSinceDiagnosis() {
