@@ -4,6 +4,7 @@ import com.pedro.glic.enums.DiabetesType;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 @Entity
@@ -101,5 +102,26 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Transient
+    private Integer getAge(){
+        if (birthday == null){
+            return null;
+        }
+        Period period = Period.between(birthday, LocalDate.now());
+        return Period.between(birthday, LocalDate.now()).getYears();
+    }
+
+    @Transient
+    public String getTimeSinceDiagnosis() {
+        if (diagnostic == null){
+            return null;
+        }
+        Period period = Period.between(diagnostic, LocalDate.now());
+
+        return period.getYears() + " anos, "
+                + period.getMonths() + " mes e "
+                + period.getDays() + " dias ";
     }
 }
