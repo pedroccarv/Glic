@@ -33,6 +33,10 @@ public class ApplicationLog {
         return appliedUnits;
     }
 
+    public Double getConsumedCarbs() {
+        return consumedCarbs;
+    }
+
     public void setAppliedUnits(Integer appliedUnits) {
         this.appliedUnits = appliedUnits;
     }
