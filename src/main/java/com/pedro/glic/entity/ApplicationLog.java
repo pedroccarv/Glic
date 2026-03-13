@@ -1,5 +1,8 @@
 package com.pedro.glic.entity;
 
+import com.pedro.glic.dto.ApplicationLogRequestDTO;
+import com.pedro.glic.dto.ApplicationLogResponseDTO;
+import com.pedro.glic.dto.InsulinRequestDTO;
 import com.pedro.glic.enums.InsulinType;
 import jakarta.persistence.*;
 
@@ -24,6 +27,16 @@ public class ApplicationLog {
 
     @ManyToOne
     private Insulin insulin;
+
+    public ApplicationLog() {}
+
+    public ApplicationLog(Integer appliedUnits, LocalDateTime applicationTime, Double consumedCarbs,User user, Insulin insulin) {
+        this.appliedUnits = appliedUnits;
+        this.applicationTime = applicationTime;
+        this.consumedCarbs = consumedCarbs;
+        this.user = user;
+        this.insulin = insulin;
+    }
 
     public Long getId() {
         return id;
@@ -70,5 +83,11 @@ public class ApplicationLog {
             return consumedCarbs / user.getCarbCounting();
         }
         return 0.0;
+    }
+
+    public void updateFrom(ApplicationLogRequestDTO dto) {
+        if (dto.appliedUnits() != null) this.appliedUnits = dto.appliedUnits();
+        if (dto.consumedCarbs() != null) this.consumedCarbs = dto.consumedCarbs();
+        if (dto.applicationTime() != null) this.applicationTime = dto.applicationTime();
     }
 }
