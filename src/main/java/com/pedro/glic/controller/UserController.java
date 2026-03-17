@@ -2,10 +2,12 @@ package com.pedro.glic.controller;
 
 import com.pedro.glic.dto.UserRequestDTO;
 import com.pedro.glic.dto.UserResponseDTO;
+import com.pedro.glic.entity.User;
 import com.pedro.glic.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,10 +28,10 @@ public class UserController {
         return ResponseEntity.ok().body(dto);
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
-        UserResponseDTO dto = userService.findById(id);
-        return ResponseEntity.ok().body(dto);
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDTO> getMe(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        return ResponseEntity.ok().body(userService.findById(user.getId()));
     }
 
     @PostMapping
@@ -38,15 +40,17 @@ public class UserController {
        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<UserResponseDTO> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+    @DeleteMapping("/me")
+    public ResponseEntity<UserResponseDTO> deleteUser(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        userService.deleteUser(user.getId());
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequestDTO dto) {
-        UserResponseDTO newUser = userService.updateUser(id, dto);
+    @PutMapping("/me")
+    public ResponseEntity<UserResponseDTO> updateUser(Authentication authentication, @Valid @RequestBody UserRequestDTO dto) {
+        User user = (User) authentication.getPrincipal();
+        UserResponseDTO newUser = userService.updateUser(user.getId(), dto);
         return ResponseEntity.ok().body(newUser);
     }
 
