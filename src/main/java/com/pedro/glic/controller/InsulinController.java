@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users/{userId}/insulins")
+@CrossOrigin(origins = "*")
 public class InsulinController {
 
     private final InsulinService insulinService;
