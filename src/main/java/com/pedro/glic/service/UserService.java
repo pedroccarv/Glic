@@ -1,5 +1,6 @@
 package com.pedro.glic.service;
 
+import com.pedro.glic.dto.UpdateProfileDTO;
 import com.pedro.glic.dto.UserRequestDTO;
 import com.pedro.glic.dto.UserResponseDTO;
 import com.pedro.glic.entity.User;
@@ -63,6 +64,17 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         user.updateFrom(dto);
+        return UserResponseDTO.toDTO(userRepository.save(user));
+    }
+
+    public UserResponseDTO updateProfile(Long id, UpdateProfileDTO dto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        user.setBirthday(dto.birthday());
+        user.setDiagnostic(dto.diagnostic());
+        user.setPhone(dto.phone());
+        user.setCarbCounting(dto.carbCounting());
+        user.setDiabetesType(dto.diabetesType());
         return UserResponseDTO.toDTO(userRepository.save(user));
     }
 

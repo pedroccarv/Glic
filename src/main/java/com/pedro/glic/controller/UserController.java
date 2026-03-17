@@ -1,5 +1,6 @@
 package com.pedro.glic.controller;
 
+import com.pedro.glic.dto.UpdateProfileDTO;
 import com.pedro.glic.dto.UserRequestDTO;
 import com.pedro.glic.dto.UserResponseDTO;
 import com.pedro.glic.entity.User;
@@ -55,6 +56,13 @@ public class UserController {
         User user = authUtils.getAuthenticatedUser();
         UserResponseDTO newUser = userService.updateUser(user.getId(), dto);
         return ResponseEntity.ok().body(newUser);
+    }
+
+    @PutMapping("/me/profile")
+    public ResponseEntity<UserResponseDTO> updateProfile(@Valid @RequestBody UpdateProfileDTO dto) {
+        User user = authUtils.getAuthenticatedUser();
+        UserResponseDTO updated = userService.updateProfile(user.getId(), dto);
+        return ResponseEntity.ok().body(updated);
     }
 
 }
