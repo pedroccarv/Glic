@@ -7,4 +7,6 @@ public record LoginRequestDTO (
         @NotBlank @Email String email,
         @NotBlank String password
 ){
+    public static record UpdateProfileDTO() {
+    }
 }
