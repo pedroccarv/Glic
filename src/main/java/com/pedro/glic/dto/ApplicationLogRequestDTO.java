@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public record ApplicationLogRequestDTO(
         @NotNull @PositiveOrZero Integer appliedUnits,
-        @NotNull @PositiveOrZero LocalDateTime applicationTime,
+        @NotNull LocalDateTime applicationTime,
         Double consumedCarbs,
         @NotNull Long insulinId,
         @NotNull Long userId
