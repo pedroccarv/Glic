@@ -5,6 +5,8 @@ import com.pedro.glic.dto.UserResponseDTO;
 import com.pedro.glic.entity.User;
 import com.pedro.glic.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,9 +17,11 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<UserResponseDTO> findAll() {
@@ -37,7 +41,7 @@ public class UserService {
         User user = new User(
                 userRequestDTO.name(),
                 userRequestDTO.email(),
-                userRequestDTO.password(),
+                passwordEncoder.encode(userRequestDTO.password()),
                 userRequestDTO.birthday(),
                 userRequestDTO.diagnostic(),
                 userRequestDTO.phone(),
