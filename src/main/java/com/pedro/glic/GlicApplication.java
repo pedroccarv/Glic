@@ -8,10 +8,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class GlicApplication {
 
     public static void main(String[] args) {
-        Dotenv dotenv = Dotenv.load();
-        System.setProperty("DB_URL", dotenv.get("DB_URL"));
-        System.setProperty("DB_USER", dotenv.get("DB_USER"));
-        System.setProperty("DB_PASS", dotenv.get("DB_PASS"));
+        try {
+            Dotenv dotenv = Dotenv.load();
+            System.setProperty("DB_URL", dotenv.get("DB_URL"));
+            System.setProperty("DB_USER", dotenv.get("DB_USER"));
+            System.setProperty("DB_PASS", dotenv.get("DB_PASS"));
+        } catch (Exception e) {
+            System.out.println("Arquivo .env não encontrado. Usando variáveis de ambiente do sistema.");
+        }
 
         SpringApplication.run(GlicApplication.class, args);
     }
